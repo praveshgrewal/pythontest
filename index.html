@@ -54,7 +54,8 @@ input:focus{border-color:#4f46e5}
 .hidden{display:none}
 .no-select{user-select:none;-webkit-user-select:none}
 .timer{position:fixed;top:16px;right:16px;background:#1a1a2e;color:#fff;padding:8px 16px;border-radius:8px;font-size:0.9rem;font-weight:500;z-index:999}
-.saving-overlay{position:fixed;inset:0;background:rgba(255,255,255,0.95);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;gap:14px}
+.saving-overlay{position:fixed;inset:0;background:rgba(255,255,255,0.95);display:none;flex-direction:column;align-items:center;justify-content:center;z-index:9999;gap:14px}
+.saving-overlay.show{display:flex}
 .spinner{width:44px;height:44px;border:3px solid #e0e7ff;border-top-color:#4f46e5;border-radius:50%;animation:spin 0.8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .saved-badge{display:inline-flex;align-items:center;gap:6px;background:#dcfce7;color:#166534;padding:6px 16px;border-radius:20px;font-size:0.85rem;font-weight:500;margin-top:0.75rem}
@@ -304,7 +305,7 @@ async function submitAssessment(){
   else{grade='D';msg='Keep practicing! Revisit fundamentals and try again 🔄'}
 
   document.getElementById('screen-assessment').classList.add('hidden');
-  document.getElementById('saving-overlay').classList.remove('hidden');
+  document.getElementById('saving-overlay').classList.add('show');
 
   try{
     await fetch(SHEET_URL,{
@@ -319,7 +320,7 @@ async function submitAssessment(){
     await new Promise(r=>setTimeout(r,800));
   }
 
-  document.getElementById('saving-overlay').classList.add('hidden');
+  document.getElementById('saving-overlay').classList.remove('show');
   document.getElementById('screen-result').classList.remove('hidden');
   document.getElementById('result-student-info').textContent=`${studentData.name} · ${studentData.email} · ${studentData.phone}`;
   document.getElementById('final-score').textContent=total;
